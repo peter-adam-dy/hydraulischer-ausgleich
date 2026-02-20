@@ -56,7 +56,7 @@ export function ProjectListPage() {
               radius="md"
               withBorder
               style={{ cursor: 'pointer' }}
-              onClick={() => navigate(`/project/${project.id}/building`)}
+              onClick={() => navigate(`/project/${project.id}`)}
             >
               <Group justify="space-between" wrap="nowrap">
                 <div>

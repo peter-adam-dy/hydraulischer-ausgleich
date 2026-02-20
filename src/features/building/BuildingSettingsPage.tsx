@@ -34,7 +34,7 @@ export function BuildingSettingsPage() {
     <>
       <PageHeader
         title={t('building.title')}
-        backTo="/"
+        backTo={`/project/${projectId}`}
         rightSection={
           <Button
             variant="light"

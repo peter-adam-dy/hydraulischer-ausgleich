@@ -66,7 +66,7 @@ export function SystemSettingsPage() {
 
   return (
     <>
-      <PageHeader title={t('system.title')} />
+      <PageHeader title={t('system.title')} backTo={`/project/${projectId}`} />
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <Stack gap="md">

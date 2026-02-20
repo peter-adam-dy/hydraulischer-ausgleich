@@ -137,7 +137,7 @@ export function PipesPage() {
 
   return (
     <>
-      <PageHeader title={t('pipes.title')} rightSection={<HelpIcon detail={t('help.circuit')} title={t('pipes.circuits')} />} />
+      <PageHeader title={t('pipes.title')} backTo={`/project/${projectId}`} rightSection={<HelpIcon detail={t('help.circuit')} title={t('pipes.circuits')} />} />
 
       <Stack gap="md">
         <Group>

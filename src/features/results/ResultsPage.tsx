@@ -70,7 +70,7 @@ export function ResultsPage() {
   if (!project || !settings) {
     return (
       <>
-        <PageHeader title={t('results.title')} />
+        <PageHeader title={t('results.title')} backTo={`/project/${projectId}`} />
         <Text>{t('common.loading')}</Text>
       </>
     );
@@ -79,7 +79,7 @@ export function ResultsPage() {
   if (!result || rooms.length === 0) {
     return (
       <>
-        <PageHeader title={t('results.title')} />
+        <PageHeader title={t('results.title')} backTo={`/project/${projectId}`} />
         <EmptyState
           title={t('results.noResults')}
           description={t('results.noResultsHint')}
@@ -96,6 +96,7 @@ export function ResultsPage() {
     <>
       <PageHeader
         title={t('results.title')}
+        backTo={`/project/${projectId}`}
         rightSection={
           <Button
             variant="light"

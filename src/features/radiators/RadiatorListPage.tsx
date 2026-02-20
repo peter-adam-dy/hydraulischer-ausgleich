@@ -26,6 +26,7 @@ export function RadiatorListPage() {
     <>
       <PageHeader
         title={t('radiators.title')}
+        backTo={`/project/${projectId}`}
         rightSection={
           <Button
             leftSection={<IconPlus size={16} />}

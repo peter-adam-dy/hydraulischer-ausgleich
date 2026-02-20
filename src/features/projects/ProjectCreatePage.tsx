@@ -101,7 +101,7 @@ export function ProjectCreatePage() {
     <>
       <PageHeader
         title={isEdit ? t('projects.edit') : t('projects.create')}
-        backTo={isEdit ? `/project/${projectId}/building` : '/'}
+        backTo={isEdit ? `/project/${projectId}` : '/'}
       />
 
       <form onSubmit={form.onSubmit(handleSubmit)}>

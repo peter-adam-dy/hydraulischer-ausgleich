@@ -19,6 +19,7 @@ export function RoomListPage() {
     <>
       <PageHeader
         title={t('rooms.title')}
+        backTo={`/project/${projectId}`}
         rightSection={
           <Button
             leftSection={<IconPlus size={16} />}

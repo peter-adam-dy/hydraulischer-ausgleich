@@ -2,6 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router';
 import { AppLayout } from '../components/layout/AppLayout.tsx';
 import { ProjectListPage } from '../features/projects/ProjectListPage.tsx';
 import { ProjectCreatePage } from '../features/projects/ProjectCreatePage.tsx';
+import { ProjectDashboardPage } from '../features/projects/ProjectDashboardPage.tsx';
 import { BuildingSettingsPage } from '../features/building/BuildingSettingsPage.tsx';
 import { RoomListPage } from '../features/rooms/RoomListPage.tsx';
 import { RoomEditPage } from '../features/rooms/RoomEditPage.tsx';
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { index: true, element: <ProjectListPage /> },
       { path: 'settings', element: <ServicePage /> },
       { path: 'project/new', element: <ProjectCreatePage /> },
+      { path: 'project/:projectId', element: <ProjectDashboardPage /> },
       { path: 'project/:projectId/edit', element: <ProjectCreatePage /> },
       { path: 'project/:projectId/building', element: <BuildingSettingsPage /> },
       { path: 'project/:projectId/rooms', element: <RoomListPage /> },
