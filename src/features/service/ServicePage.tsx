@@ -136,7 +136,7 @@ export function ServicePage() {
 
         <Stack gap={4} align="center">
           <Text size="xs" c="dimmed">Hydraulischer Abgleich</Text>
-          <Text size="xs" c="dimmed" ff="monospace">{__GIT_HASH__} &middot; {new Date(__GIT_DATE__).toLocaleDateString('de-DE')}</Text>
+          <Text size="xs" c="dimmed" ff="monospace">{__GIT_HASH__} &middot; {new Date(__GIT_DATE__).toLocaleString('de-DE')}</Text>
         </Stack>
       </Stack>
     </>
