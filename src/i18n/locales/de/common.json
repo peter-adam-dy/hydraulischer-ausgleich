@@ -173,6 +173,8 @@
     "assignRadiator": "Heizkörper zuordnen",
     "pipeLength": "Rohrleitungslänge (Hin+Rück)",
     "pipeLengthUnit": "m",
+    "circuitDefaultName": "Strang",
+    "pipeLengthHint": "Rohrlänge = Gesamtstrecke Therme ↔ Heizkörper (Hin + Rück)",
     "empty": "Noch keine Heizkreise vorhanden",
     "emptyHint": "Erstellen Sie Heizkreise und ordnen Sie Heizkörper mit Rohrleitungslängen zu."
   },

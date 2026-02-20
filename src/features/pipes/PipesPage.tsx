@@ -4,6 +4,7 @@ import {
   Group,
   Text,
   Stack,
+  TextInput,
   NumberInput,
   Select,
   ActionIcon,
@@ -19,6 +20,7 @@ import {
   useRadiators,
   useRooms,
   createCircuit,
+  updateCircuit,
   deleteCircuit,
   addRadiatorToCircuit,
   updateCircuitRadiator,
@@ -90,6 +92,12 @@ function CircuitCard({ circuitId, projectId }: { circuitId: number; projectId: n
           </Group>
         ))}
 
+        {circuitRadiators.length > 0 && (
+          <Text size="xs" c="dimmed">
+            <HelpIcon tooltip={t('help.pipeLength')} /> {t('pipes.pipeLengthHint')}
+          </Text>
+        )}
+
         {availableRadiators.length > 0 && (
           <Select
             size="xs"
@@ -98,8 +106,9 @@ function CircuitCard({ circuitId, projectId }: { circuitId: number; projectId: n
               value: String(r.id),
               label: getRadiatorLabel(r.id!),
             }))}
+            value={null}
             onChange={handleAddRadiator}
-            clearable
+            allowDeselect
           />
         )}
       </Stack>
@@ -128,7 +137,7 @@ export function PipesPage() {
 
   const handleCreateCircuit = async () => {
     if (!numProjectId) return;
-    const name = `${t('pipes.circuitNamePlaceholder')} ${circuits.length + 1}`;
+    const name = `${t('pipes.circuitDefaultName')} ${circuits.length + 1}`;
     await createCircuit({ projectId: numProjectId, name });
   };
 
@@ -146,7 +155,17 @@ export function PipesPage() {
           circuits.map((circuit) => (
             <Card key={circuit.id} shadow="xs" padding="md" radius="md" withBorder>
               <Group justify="space-between" mb="sm">
-                <Text fw={500}>{circuit.name}</Text>
+                <TextInput
+                  size="xs"
+                  variant="unstyled"
+                  styles={{ input: { fontWeight: 500, fontSize: 'var(--mantine-font-size-sm)' } }}
+                  value={circuit.name}
+                  onChange={(e) => {
+                    if (circuit.id) {
+                      updateCircuit(circuit.id, { name: e.currentTarget.value });
+                    }
+                  }}
+                />
                 <ActionIcon
                   variant="subtle"
                   color="red"

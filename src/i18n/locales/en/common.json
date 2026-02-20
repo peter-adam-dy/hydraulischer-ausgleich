@@ -173,6 +173,8 @@
     "assignRadiator": "Assign Radiator",
     "pipeLength": "Pipe Length (Supply+Return)",
     "pipeLengthUnit": "m",
+    "circuitDefaultName": "Circuit",
+    "pipeLengthHint": "Pipe length = total distance boiler ↔ radiator (supply + return)",
     "empty": "No circuits yet",
     "emptyHint": "Create circuits and assign radiators with pipe lengths."
   },
