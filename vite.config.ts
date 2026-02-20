@@ -2,16 +2,26 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'child_process';
-import { writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 
 function gitInfo() {
+  // 1. Try reading .buildinfo.json (written by Dockerfile)
+  try {
+    if (existsSync('.buildinfo.json')) {
+      const info = JSON.parse(readFileSync('.buildinfo.json', 'utf-8'));
+      if (info.hash && info.hash !== 'unknown') return info;
+    }
+  } catch { /* ignore */ }
+
+  // 2. Try git directly (works in local dev)
   try {
     const hash = execSync('git rev-parse --short HEAD').toString().trim();
     const date = execSync('git log -1 --format=%cI').toString().trim();
     return { hash, date };
-  } catch {
-    return { hash: process.env.GIT_HASH ?? 'prod', date: process.env.GIT_DATE ?? new Date().toISOString() };
-  }
+  } catch { /* ignore */ }
+
+  // 3. Fallback
+  return { hash: 'prod', date: new Date().toISOString() };
 }
 
 const git = gitInfo();
