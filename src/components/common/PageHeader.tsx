@@ -13,7 +13,17 @@ export function PageHeader({ title, backTo, rightSection }: PageHeaderProps) {
   const navigate = useNavigate();
 
   return (
-    <Group justify="space-between" mb="md">
+    <Group
+      justify="space-between"
+      mb="md"
+      py="xs"
+      style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        backgroundColor: 'var(--mantine-color-body)',
+      }}
+    >
       <Group gap="sm">
         {backTo && (
           <ActionIcon variant="subtle" onClick={() => navigate(backTo)}>
