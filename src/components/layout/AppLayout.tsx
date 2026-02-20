@@ -14,6 +14,9 @@ export function AppLayout() {
           paddingLeft: 'calc(var(--mantine-spacing-md) + env(safe-area-inset-left, 0px))',
           paddingRight: 'calc(var(--mantine-spacing-md) + env(safe-area-inset-right, 0px))',
           paddingTop: 'calc(var(--mantine-spacing-md) + env(safe-area-inset-top, 0px))',
+          paddingBottom: projectId
+            ? 'calc(var(--mantine-spacing-md) + 60px + env(safe-area-inset-bottom, 0px))'
+            : 'calc(var(--mantine-spacing-md) + env(safe-area-inset-bottom, 0px))',
         },
         footer: {
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
