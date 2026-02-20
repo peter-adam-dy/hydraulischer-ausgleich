@@ -76,17 +76,12 @@ export function RoomEditPage() {
   const isEdit = Boolean(roomId);
   const existing = useRoom(roomId ? Number(roomId) : undefined);
   const project = useProject(projectId ? Number(projectId) : undefined);
-  const [collapsedComponents, setCollapsedComponents] = useState<Set<string>>(new Set());
+  const [expandedComponent, setExpandedComponent] = useState<string | null>(null);
   const [dbRoomId, setDbRoomId] = useState<number | null>(roomId ? Number(roomId) : null);
   const [initialized, setInitialized] = useState(false);
 
   const toggleCollapse = (id: string) => {
-    setCollapsedComponents((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    setExpandedComponent((prev) => (prev === id ? null : id));
   };
 
   const form = useForm<FormValues>({
@@ -188,8 +183,9 @@ export function RoomEditPage() {
     const ageClass = project?.buildingAgeClass ?? 'before_1978';
     const componentType: ComponentType = 'exterior_wall';
     const roomHeight = formValues.height || 2.5;
+    const newId = generateId();
     form.insertListItem('buildingComponents', {
-      id: generateId(),
+      id: newId,
       name: '',
       type: componentType,
       area: Math.round(4 * roomHeight * 100) / 100,
@@ -199,6 +195,7 @@ export function RoomEditPage() {
       dimWidth: 4,
       dimHeight: roomHeight,
     });
+    setExpandedComponent(newId);
   };
 
   const addWindow = (componentIndex: number) => {
@@ -381,7 +378,7 @@ export function RoomEditPage() {
         <Group gap={4}><Text fw={500}>{t('rooms.components')}</Text><HelpIcon detail={t('help.components')} title={t('rooms.components')} /></Group>
 
         {formValues.buildingComponents.map((component: FormValues['buildingComponents'][number], index: number) => {
-          const isCollapsed = collapsedComponents.has(component.id);
+          const isCollapsed = expandedComponent !== component.id;
           return (
             <Card key={component.id} shadow="xs" padding="sm" radius="md" withBorder>
               <Group justify="space-between" mb={isCollapsed ? 0 : 'xs'} style={{ cursor: 'pointer' }} onClick={() => toggleCollapse(component.id)}>
