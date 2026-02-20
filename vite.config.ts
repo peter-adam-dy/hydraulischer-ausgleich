@@ -1,7 +1,8 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 import { execSync } from 'child_process';
+import { writeFileSync } from 'fs';
 
 function gitInfo() {
   try {
@@ -9,11 +10,21 @@ function gitInfo() {
     const date = execSync('git log -1 --format=%cI').toString().trim();
     return { hash, date };
   } catch {
-    return { hash: process.env.GIT_HASH ?? 'dev', date: process.env.GIT_DATE ?? new Date().toISOString() };
+    return { hash: process.env.GIT_HASH ?? 'prod', date: process.env.GIT_DATE ?? new Date().toISOString() };
   }
 }
 
 const git = gitInfo();
+
+function versionFilePlugin(): Plugin {
+  return {
+    name: 'version-file',
+    writeBundle(options) {
+      const dir = options.dir ?? 'dist';
+      writeFileSync(`${dir}/version.json`, JSON.stringify({ hash: git.hash, date: git.date }));
+    },
+  };
+}
 
 export default defineConfig({
   define: {
@@ -22,6 +33,7 @@ export default defineConfig({
   },
   plugins: [
     react(),
+    versionFilePlugin(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg'],
@@ -45,6 +57,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
+        navigateFallbackDenylist: [/^\/version\.json$/],
       },
     }),
   ],

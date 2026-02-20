@@ -1,12 +1,8 @@
 FROM node:24-alpine AS build
-ARG GIT_HASH=dev
-ARG GIT_DATE=""
-ENV GIT_HASH=$GIT_HASH
-ENV GIT_DATE=$GIT_DATE
+RUN apk add --no-cache git
 WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
 COPY . .
+RUN npm ci
 RUN npm run build
 
 FROM nginx:alpine
