@@ -44,6 +44,9 @@ class HydraulicDatabase extends Dexie {
         }
       });
     });
+
+    // v3: Force re-apply stores to fix broken v2 migration that used empty stores({}).
+    this.version(3).stores(STORES);
   }
 }
 

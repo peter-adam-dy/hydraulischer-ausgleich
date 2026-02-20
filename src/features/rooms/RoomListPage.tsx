@@ -1,4 +1,4 @@
-import { Button, Card, Group, Text, Stack, Badge } from '@mantine/core';
+import { Button, Card, Group, Text, Stack, Badge, ActionIcon } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -21,12 +21,9 @@ export function RoomListPage() {
         title={t('rooms.title')}
         backTo={`/project/${projectId}`}
         rightSection={
-          <Button
-            leftSection={<IconPlus size={16} />}
-            onClick={() => navigate(`/project/${projectId}/rooms/new`)}
-          >
-            {t('rooms.create')}
-          </Button>
+          <ActionIcon variant="filled" color="blue" onClick={() => navigate(`/project/${projectId}/rooms/new`)}>
+            <IconPlus size={18} />
+          </ActionIcon>
         }
       />
 
