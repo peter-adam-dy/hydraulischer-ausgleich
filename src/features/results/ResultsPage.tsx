@@ -27,9 +27,9 @@ import { db } from '../../db/index.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 function getCoverageBadge(percent: number, t: (key: string) => string) {
-  if (percent < 90) return <Badge color="red" size="sm">{t('results.undersupplied')}</Badge>;
-  if (percent <= 110) return <Badge color="green" size="sm">{t('results.adequate')}</Badge>;
-  return <Badge color="yellow" size="sm">{t('results.oversupplied')}</Badge>;
+  if (percent < 90) return <Badge color="red" size="sm">{t('results.undersupplied')} ({percent}%)</Badge>;
+  if (percent <= 110) return <Badge color="green" size="sm">{t('results.adequate')} ({percent}%)</Badge>;
+  return <Badge color="yellow" size="sm">{t('results.oversupplied')} ({percent}%)</Badge>;
 }
 
 export function ResultsPage() {

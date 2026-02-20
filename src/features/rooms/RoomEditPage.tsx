@@ -182,6 +182,8 @@ export function RoomEditPage() {
     }
   };
 
+  const isHorizontalComponent = (type: string) => type === 'floor' || type === 'ceiling' || type === 'roof';
+
   const addComponent = () => {
     const ageClass = project?.buildingAgeClass ?? 'before_1978';
     const componentType: ComponentType = 'exterior_wall';
@@ -222,6 +224,13 @@ export function RoomEditPage() {
         form.setFieldValue(`buildingComponents.${index}.adjacentTemp`, 15);
       } else {
         form.setFieldValue(`buildingComponents.${index}.adjacentTemp`, null);
+      }
+      // Floor/ceiling/roof: set to room area (length × width)
+      if (isHorizontalComponent(value)) {
+        const roomArea = Math.round(formValues.length * formValues.width * 100) / 100;
+        form.setFieldValue(`buildingComponents.${index}.area`, roomArea);
+        form.setFieldValue(`buildingComponents.${index}.dimWidth`, formValues.length);
+        form.setFieldValue(`buildingComponents.${index}.dimHeight`, formValues.width);
       }
     }
   };
@@ -497,6 +506,30 @@ export function RoomEditPage() {
                     />
                   </Group>
                 )}
+
+                {isHorizontalComponent(component.type) && (() => {
+                  const roomArea = Math.round(formValues.length * formValues.width * 100) / 100;
+                  const differs = Math.abs(component.area - roomArea) > 0.01;
+                  return differs ? (
+                    <Group gap="xs" mb="xs">
+                      <Text size="xs" c="orange.6">
+                        {t('rooms.areaDeviatesFromRoom', { roomArea: roomArea.toFixed(1) })}
+                      </Text>
+                      <Button
+                        variant="subtle"
+                        size="compact-xs"
+                        color="orange"
+                        onClick={() => {
+                          form.setFieldValue(`buildingComponents.${index}.area`, roomArea);
+                          form.setFieldValue(`buildingComponents.${index}.dimWidth`, formValues.length);
+                          form.setFieldValue(`buildingComponents.${index}.dimHeight`, formValues.width);
+                        }}
+                      >
+                        {t('rooms.resetToRoomArea')}
+                      </Button>
+                    </Group>
+                  ) : null;
+                })()}
 
                 <Group grow mb="xs">
                   <NumberInput

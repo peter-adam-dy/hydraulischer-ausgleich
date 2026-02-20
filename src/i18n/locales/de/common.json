@@ -105,6 +105,8 @@
     "addWindow": "Fenster hinzufügen",
     "windowArea": "Fensterfläche",
     "windowUValue": "Fenster U-Wert",
+    "areaDeviatesFromRoom": "Weicht von Raumfläche ab ({{roomArea}} m²)",
+    "resetToRoomArea": "Auf Raumfläche zurücksetzen",
     "transmissionLoss": "Transmissionsverlust",
     "ventilationLoss": "Lüftungsverlust",
     "totalHeatingLoad": "Gesamtheizlast",

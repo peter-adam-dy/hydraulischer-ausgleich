@@ -105,6 +105,8 @@
     "addWindow": "Add Window",
     "windowArea": "Window Area",
     "windowUValue": "Window U-Value",
+    "areaDeviatesFromRoom": "Deviates from room area ({{roomArea}} m²)",
+    "resetToRoomArea": "Reset to room area",
     "transmissionLoss": "Transmission Loss",
     "ventilationLoss": "Ventilation Loss",
     "totalHeatingLoad": "Total Heating Load",
