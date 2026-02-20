@@ -93,6 +93,10 @@
       "ceiling": "Geschossdecke"
     },
     "componentArea": "Fläche",
+    "componentWidth": "Breite",
+    "componentHeight": "Höhe",
+    "dimMode": "B × H",
+    "areaMode": "Fläche",
     "componentUValue": "U-Wert",
     "adjacentTemp": "Angrenzende Temperatur",
     "adjacentTempOutdoor": "Außenluft",

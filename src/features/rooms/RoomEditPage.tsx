@@ -10,6 +10,7 @@ import {
   ActionIcon,
   Divider,
   Alert,
+  SegmentedControl,
 } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
 import { useNavigate, useParams } from 'react-router';
@@ -30,6 +31,8 @@ const windowSchema = z.object({
   id: z.string(),
   area: z.number().positive(),
   uValue: z.number().positive(),
+  dimWidth: z.number().positive().optional(),
+  dimHeight: z.number().positive().optional(),
 });
 
 const componentSchema = z.object({
@@ -39,6 +42,8 @@ const componentSchema = z.object({
   uValue: z.number().positive(),
   adjacentTemp: z.number().nullable(),
   windows: z.array(windowSchema),
+  dimWidth: z.number().positive().optional(),
+  dimHeight: z.number().positive().optional(),
 });
 
 const schema = z.object({
@@ -118,6 +123,8 @@ export function RoomEditPage() {
       uValue: getDefaultUValue(ageClass, componentType),
       adjacentTemp: null,
       windows: [],
+      dimWidth: 4,
+      dimHeight: 2.5,
     });
   };
 
@@ -127,6 +134,8 @@ export function RoomEditPage() {
       id: generateId(),
       area: 1.5,
       uValue: getDefaultUValue(ageClass, 'window'),
+      dimWidth: 1.2,
+      dimHeight: 1.25,
     });
   };
 
@@ -337,17 +346,87 @@ export function RoomEditPage() {
                 </ActionIcon>
               </Group>
 
-              <Group grow mb="xs">
-                <NumberInput
-                  label={t('rooms.componentArea')}
-                  suffix=" m²"
+              <Group mb={4}>
+                <SegmentedControl
                   size="xs"
-                  min={0.1}
-                  step={0.1}
-                  decimalScale={2}
-                  key={form.key(`buildingComponents.${index}.area`)}
-                  {...form.getInputProps(`buildingComponents.${index}.area`)}
+                  value={component.dimWidth !== undefined ? 'dimensions' : 'area'}
+                  onChange={(mode) => {
+                    if (mode === 'dimensions') {
+                      const h = formValues.height || 2.5;
+                      const w = component.area > 0 ? Math.round((component.area / h) * 100) / 100 : 4;
+                      form.setFieldValue(`buildingComponents.${index}.dimWidth`, w);
+                      form.setFieldValue(`buildingComponents.${index}.dimHeight`, h);
+                    } else {
+                      form.setFieldValue(`buildingComponents.${index}.dimWidth`, undefined as unknown as number);
+                      form.setFieldValue(`buildingComponents.${index}.dimHeight`, undefined as unknown as number);
+                    }
+                  }}
+                  data={[
+                    { label: t('rooms.dimMode'), value: 'dimensions' },
+                    { label: t('rooms.areaMode'), value: 'area' },
+                  ]}
                 />
+              </Group>
+
+              {component.dimWidth !== undefined ? (
+                <Group grow mb="xs">
+                  <NumberInput
+                    label={t('rooms.componentWidth')}
+                    suffix=" m"
+                    size="xs"
+                    min={0.1}
+                    step={0.1}
+                    decimalScale={2}
+                    value={component.dimWidth}
+                    onChange={(val) => {
+                      if (typeof val === 'number') {
+                        form.setFieldValue(`buildingComponents.${index}.dimWidth`, val);
+                        form.setFieldValue(`buildingComponents.${index}.area`, Math.round(val * (component.dimHeight ?? 2.5) * 100) / 100);
+                      }
+                    }}
+                  />
+                  <NumberInput
+                    label={t('rooms.componentHeight')}
+                    suffix=" m"
+                    size="xs"
+                    min={0.1}
+                    step={0.1}
+                    decimalScale={2}
+                    value={component.dimHeight}
+                    onChange={(val) => {
+                      if (typeof val === 'number') {
+                        form.setFieldValue(`buildingComponents.${index}.dimHeight`, val);
+                        form.setFieldValue(`buildingComponents.${index}.area`, Math.round((component.dimWidth ?? 4) * val * 100) / 100);
+                      }
+                    }}
+                  />
+                  <NumberInput
+                    label={t('rooms.componentArea')}
+                    suffix=" m²"
+                    size="xs"
+                    readOnly
+                    variant="filled"
+                    decimalScale={2}
+                    key={form.key(`buildingComponents.${index}.area`)}
+                    {...form.getInputProps(`buildingComponents.${index}.area`)}
+                  />
+                </Group>
+              ) : (
+                <Group grow mb="xs">
+                  <NumberInput
+                    label={t('rooms.componentArea')}
+                    suffix=" m²"
+                    size="xs"
+                    min={0.1}
+                    step={0.1}
+                    decimalScale={2}
+                    key={form.key(`buildingComponents.${index}.area`)}
+                    {...form.getInputProps(`buildingComponents.${index}.area`)}
+                  />
+                </Group>
+              )}
+
+              <Group grow mb="xs">
                 <NumberInput
                   label={<LabelWithHelp label={t('rooms.componentUValue')} tooltip={t('help.uValue')} />}
                   suffix=" W/(m²·K)"
@@ -386,39 +465,112 @@ export function RoomEditPage() {
                     </Button>
                   </Group>
                   {component.windows.map((window: FormValues['buildingComponents'][number]['windows'][number], wIndex: number) => (
-                    <Group key={window.id} gap="xs" mb="xs">
-                      <NumberInput
-                        label={t('rooms.windowArea')}
-                        suffix=" m²"
-                        size="xs"
-                        min={0.1}
-                        step={0.1}
-                        decimalScale={2}
-                        style={{ flex: 1 }}
-                        key={form.key(`buildingComponents.${index}.windows.${wIndex}.area`)}
-                        {...form.getInputProps(`buildingComponents.${index}.windows.${wIndex}.area`)}
-                      />
-                      <NumberInput
-                        label={t('rooms.windowUValue')}
-                        suffix=" W/(m²·K)"
-                        size="xs"
-                        min={0.1}
-                        step={0.01}
-                        decimalScale={2}
-                        style={{ flex: 1 }}
-                        key={form.key(`buildingComponents.${index}.windows.${wIndex}.uValue`)}
-                        {...form.getInputProps(`buildingComponents.${index}.windows.${wIndex}.uValue`)}
-                      />
-                      <ActionIcon
-                        variant="subtle"
-                        color="red"
-                        size="sm"
-                        mt={22}
-                        onClick={() => form.removeListItem(`buildingComponents.${index}.windows`, wIndex)}
-                      >
-                        <IconTrash size={12} />
-                      </ActionIcon>
-                    </Group>
+                    <Card key={window.id} padding="xs" radius="sm" withBorder mb="xs" bg="gray.0">
+                      <Group justify="space-between" mb={4}>
+                        <SegmentedControl
+                          size="xs"
+                          value={window.dimWidth !== undefined ? 'dimensions' : 'area'}
+                          onChange={(mode) => {
+                            const prefix = `buildingComponents.${index}.windows.${wIndex}`;
+                            if (mode === 'dimensions') {
+                              const h = 1.25;
+                              const w = window.area > 0 ? Math.round((window.area / h) * 100) / 100 : 1.2;
+                              form.setFieldValue(`${prefix}.dimWidth`, w);
+                              form.setFieldValue(`${prefix}.dimHeight`, h);
+                            } else {
+                              form.setFieldValue(`${prefix}.dimWidth`, undefined as unknown as number);
+                              form.setFieldValue(`${prefix}.dimHeight`, undefined as unknown as number);
+                            }
+                          }}
+                          data={[
+                            { label: t('rooms.dimMode'), value: 'dimensions' },
+                            { label: t('rooms.areaMode'), value: 'area' },
+                          ]}
+                        />
+                        <ActionIcon
+                          variant="subtle"
+                          color="red"
+                          size="sm"
+                          onClick={() => form.removeListItem(`buildingComponents.${index}.windows`, wIndex)}
+                        >
+                          <IconTrash size={12} />
+                        </ActionIcon>
+                      </Group>
+                      <Group gap="xs">
+                        {window.dimWidth !== undefined ? (
+                          <>
+                            <NumberInput
+                              label={t('rooms.componentWidth')}
+                              suffix=" m"
+                              size="xs"
+                              min={0.1}
+                              step={0.1}
+                              decimalScale={2}
+                              style={{ flex: 1 }}
+                              value={window.dimWidth}
+                              onChange={(val) => {
+                                if (typeof val === 'number') {
+                                  const prefix = `buildingComponents.${index}.windows.${wIndex}`;
+                                  form.setFieldValue(`${prefix}.dimWidth`, val);
+                                  form.setFieldValue(`${prefix}.area`, Math.round(val * (window.dimHeight ?? 1.25) * 100) / 100);
+                                }
+                              }}
+                            />
+                            <NumberInput
+                              label={t('rooms.componentHeight')}
+                              suffix=" m"
+                              size="xs"
+                              min={0.1}
+                              step={0.1}
+                              decimalScale={2}
+                              style={{ flex: 1 }}
+                              value={window.dimHeight}
+                              onChange={(val) => {
+                                if (typeof val === 'number') {
+                                  const prefix = `buildingComponents.${index}.windows.${wIndex}`;
+                                  form.setFieldValue(`${prefix}.dimHeight`, val);
+                                  form.setFieldValue(`${prefix}.area`, Math.round((window.dimWidth ?? 1.2) * val * 100) / 100);
+                                }
+                              }}
+                            />
+                            <NumberInput
+                              label={t('rooms.windowArea')}
+                              suffix=" m²"
+                              size="xs"
+                              readOnly
+                              variant="filled"
+                              decimalScale={2}
+                              style={{ flex: 1 }}
+                              key={form.key(`buildingComponents.${index}.windows.${wIndex}.area`)}
+                              {...form.getInputProps(`buildingComponents.${index}.windows.${wIndex}.area`)}
+                            />
+                          </>
+                        ) : (
+                          <NumberInput
+                            label={t('rooms.windowArea')}
+                            suffix=" m²"
+                            size="xs"
+                            min={0.1}
+                            step={0.1}
+                            decimalScale={2}
+                            style={{ flex: 1 }}
+                            key={form.key(`buildingComponents.${index}.windows.${wIndex}.area`)}
+                            {...form.getInputProps(`buildingComponents.${index}.windows.${wIndex}.area`)}
+                          />
+                        )}
+                        <NumberInput
+                          label={t('rooms.windowUValue')}
+                          suffix=" W/(m²·K)"
+                          size="xs"
+                          min={0.1}
+                          step={0.01}
+                          decimalScale={2}
+                          style={{ flex: 1 }}
+                          key={form.key(`buildingComponents.${index}.windows.${wIndex}.uValue`)}
+                          {...form.getInputProps(`buildingComponents.${index}.windows.${wIndex}.uValue`)}
+                        />
+                      </Group>
+                    </Card>
                   ))}
                 </>
               )}

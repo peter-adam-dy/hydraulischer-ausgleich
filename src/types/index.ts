@@ -29,6 +29,8 @@ export interface WindowComponent {
   id: string;
   area: number; // m²
   uValue: number; // W/(m²·K)
+  dimWidth?: number; // m (optional, for width×height input mode)
+  dimHeight?: number; // m
 }
 
 export interface BuildingComponent {
@@ -38,6 +40,8 @@ export interface BuildingComponent {
   uValue: number; // W/(m²·K)
   adjacentTemp: number | null; // °C, null = outdoor
   windows: WindowComponent[];
+  dimWidth?: number; // m (optional, for width×height input mode)
+  dimHeight?: number; // m
 }
 
 export interface Project {

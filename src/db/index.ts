@@ -30,6 +30,18 @@ class HydraulicDatabase extends Dexie {
       systemSettings: '++id, projectId',
       calculationResults: '++id, projectId, roomId, radiatorId',
     });
+
+    // v2: Radiator gains optional valveType/valveDn fields,
+    //     SystemSettings gains valveDn,
+    //     BuildingComponent/WindowComponent gain dimWidth/dimHeight (nested JSON, no index change).
+    //     Stores unchanged — Dexie only needs .stores() for index changes.
+    this.version(2).stores({}).upgrade((tx) => {
+      return tx.table('systemSettings').toCollection().modify((settings) => {
+        if (settings.valveDn === undefined) {
+          settings.valveDn = 15;
+        }
+      });
+    });
   }
 }
 

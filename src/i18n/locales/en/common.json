@@ -93,6 +93,10 @@
       "ceiling": "Intermediate Ceiling"
     },
     "componentArea": "Area",
+    "componentWidth": "Width",
+    "componentHeight": "Height",
+    "dimMode": "W × H",
+    "areaMode": "Area",
     "componentUValue": "U-Value",
     "adjacentTemp": "Adjacent Temperature",
     "adjacentTempOutdoor": "Outdoor Air",
