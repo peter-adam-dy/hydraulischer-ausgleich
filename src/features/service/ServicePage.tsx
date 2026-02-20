@@ -1,29 +1,28 @@
-import { Button, Card, Group, Stack, Text, SegmentedControl, FileButton, Divider } from '@mantine/core';
-import { IconDownload, IconUpload, IconRefresh } from '@tabler/icons-react';
+import { Button, Card, Group, Stack, Text, SegmentedControl, FileButton, Divider, Badge } from '@mantine/core';
+import { IconDownload, IconUpload, IconRefresh, IconSearch } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useRef, useState } from 'react';
 import { PageHeader } from '../../components/common/PageHeader.tsx';
 import { exportAllData, downloadJson, importData } from '../../utils/exportImport.ts';
+import { useUpdateCheckContext } from '../../utils/UpdateCheckContext.ts';
 
-async function updateApp() {
-  // Unregister all service workers
+async function forceUpdate() {
   if ('serviceWorker' in navigator) {
     const registrations = await navigator.serviceWorker.getRegistrations();
     await Promise.all(registrations.map((r) => r.unregister()));
   }
-  // Clear all caches
   if ('caches' in window) {
     const keys = await caches.keys();
     await Promise.all(keys.map((k) => caches.delete(k)));
   }
-  // Reload from server
   window.location.reload();
 }
 
 export function ServicePage() {
   const { t, i18n } = useTranslation();
   const resetRef = useRef<() => void>(null);
-  const [updating, setUpdating] = useState(false);
+  const [forceUpdating, setForceUpdating] = useState(false);
+  const { updateAvailable, checking, lastChecked, checkForUpdate } = useUpdateCheckContext();
 
   const handleExport = async () => {
     const data = await exportAllData();
@@ -40,9 +39,9 @@ export function ServicePage() {
     resetRef.current?.();
   };
 
-  const handleUpdate = async () => {
-    setUpdating(true);
-    await updateApp();
+  const handleForceUpdate = async () => {
+    setForceUpdating(true);
+    await forceUpdate();
   };
 
   return (
@@ -90,22 +89,55 @@ export function ServicePage() {
 
         <Card shadow="xs" padding="md" radius="md" withBorder>
           <Text fw={500} mb="sm">{t('common.appUpdate')}</Text>
-          <Text size="sm" c="dimmed" mb="md">{t('common.appUpdateHint')}</Text>
-          <Button
-            variant="light"
-            leftSection={<IconRefresh size={16} />}
-            onClick={handleUpdate}
-            loading={updating}
-          >
-            {t('common.appUpdateButton')}
-          </Button>
+
+          <Group gap="xs" mb="md">
+            <Button
+              variant="light"
+              size="compact-sm"
+              leftSection={<IconSearch size={14} />}
+              onClick={checkForUpdate}
+              loading={checking}
+            >
+              {t('common.checkForUpdates')}
+            </Button>
+            {lastChecked && (
+              <Text size="xs" c="dimmed">
+                {t('common.lastChecked')}: {lastChecked.toLocaleTimeString()}
+              </Text>
+            )}
+          </Group>
+
+          {updateAvailable ? (
+            <Button
+              leftSection={<IconRefresh size={16} />}
+              onClick={handleForceUpdate}
+              loading={forceUpdating}
+            >
+              {t('common.appUpdateButton')}
+            </Button>
+          ) : (
+            <Group gap="xs">
+              <Badge color="green" variant="light">{t('common.appUpToDate')}</Badge>
+              <Button
+                variant="subtle"
+                size="compact-xs"
+                color="gray"
+                leftSection={<IconRefresh size={12} />}
+                onClick={handleForceUpdate}
+                loading={forceUpdating}
+              >
+                {t('common.forceUpdate')}
+              </Button>
+            </Group>
+          )}
         </Card>
 
         <Divider />
 
-        <Text size="xs" c="dimmed" ta="center">
-          Hydraulischer Abgleich &middot; {__GIT_HASH__} &middot; {new Date(__GIT_DATE__).toLocaleDateString('de-DE')}
-        </Text>
+        <Stack gap={4} align="center">
+          <Text size="xs" c="dimmed">Hydraulischer Abgleich</Text>
+          <Text size="xs" c="dimmed" ff="monospace">{__GIT_HASH__} &middot; {new Date(__GIT_DATE__).toLocaleDateString('de-DE')}</Text>
+        </Stack>
       </Stack>
     </>
   );
