@@ -250,6 +250,12 @@
       "celsius": "°C",
       "paPerM": "Pa/m"
     },
+    "settings": "Einstellungen",
+    "dataManagement": "Datenverwaltung",
+    "dataManagementHint": "Exportieren Sie Ihre Projekte als JSON-Backup oder importieren Sie ein vorhandenes Backup.",
+    "appUpdate": "App-Aktualisierung",
+    "appUpdateHint": "Leert den Cache und lädt die neueste Version der App. Ihre gespeicherten Projektdaten bleiben erhalten.",
+    "appUpdateButton": "App aktualisieren",
     "offline": "Offline",
     "online": "Online",
     "loading": "Wird geladen...",

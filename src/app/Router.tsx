@@ -10,6 +10,7 @@ import { RadiatorEditPage } from '../features/radiators/RadiatorEditPage.tsx';
 import { SystemSettingsPage } from '../features/system/SystemSettingsPage.tsx';
 import { PipesPage } from '../features/pipes/PipesPage.tsx';
 import { ResultsPage } from '../features/results/ResultsPage.tsx';
+import { ServicePage } from '../features/service/ServicePage.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +18,7 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true, element: <ProjectListPage /> },
+      { path: 'settings', element: <ServicePage /> },
       { path: 'project/new', element: <ProjectCreatePage /> },
       { path: 'project/:projectId/edit', element: <ProjectCreatePage /> },
       { path: 'project/:projectId/building', element: <BuildingSettingsPage /> },

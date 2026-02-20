@@ -1,4 +1,8 @@
 FROM node:24-alpine AS build
+ARG GIT_HASH=dev
+ARG GIT_DATE=""
+ENV GIT_HASH=$GIT_HASH
+ENV GIT_DATE=$GIT_DATE
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
