@@ -19,11 +19,11 @@ describe('valvePreset', () => {
 
   describe('findValvePreset', () => {
     it('finds correct Danfoss RA-N DN15 preset', () => {
-      // Kv 0.459 → next higher is setting 5 (kv 0.56)
-      const preset = findValvePreset('danfoss_ra_n', 15, 0.459);
+      // Kv 0.30 → next higher is setting 5 (kv 0.36)
+      const preset = findValvePreset('danfoss_ra_n', 15, 0.30);
       expect(preset).toBeDefined();
       expect(preset!.setting).toBe('5');
-      expect(preset!.kv).toBe(0.56);
+      expect(preset!.kv).toBe(0.36);
     });
 
     it('returns undefined for unknown valve type', () => {
