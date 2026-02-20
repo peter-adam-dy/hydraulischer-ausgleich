@@ -106,6 +106,68 @@ export const valveTypes: ValveType[] = [
     ],
   },
   {
+    id: 'danfoss_rav',
+    name: 'RAV',
+    manufacturer: 'Danfoss',
+    sizes: [
+      {
+        dn: 15,
+        presets: [
+          { setting: '1', kv: 0.04 },
+          { setting: '2', kv: 0.10 },
+          { setting: '3', kv: 0.18 },
+          { setting: '4', kv: 0.30 },
+          { setting: '5', kv: 0.45 },
+          { setting: '6', kv: 0.65 },
+          { setting: 'N', kv: 0.90 },
+        ],
+      },
+      {
+        dn: 20,
+        presets: [
+          { setting: '1', kv: 0.08 },
+          { setting: '2', kv: 0.20 },
+          { setting: '3', kv: 0.38 },
+          { setting: '4', kv: 0.60 },
+          { setting: '5', kv: 0.90 },
+          { setting: '6', kv: 1.30 },
+          { setting: 'N', kv: 1.80 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'danfoss_ravl',
+    name: 'RAVL',
+    manufacturer: 'Danfoss',
+    sizes: [
+      {
+        dn: 15,
+        presets: [
+          { setting: '1', kv: 0.04 },
+          { setting: '2', kv: 0.10 },
+          { setting: '3', kv: 0.18 },
+          { setting: '4', kv: 0.30 },
+          { setting: '5', kv: 0.48 },
+          { setting: '6', kv: 0.70 },
+          { setting: 'N', kv: 0.90 },
+        ],
+      },
+      {
+        dn: 20,
+        presets: [
+          { setting: '1', kv: 0.08 },
+          { setting: '2', kv: 0.20 },
+          { setting: '3', kv: 0.38 },
+          { setting: '4', kv: 0.62 },
+          { setting: '5', kv: 0.92 },
+          { setting: '6', kv: 1.32 },
+          { setting: 'N', kv: 1.80 },
+        ],
+      },
+    ],
+  },
+  {
     id: 'oventrop_av6',
     name: 'AV-6',
     manufacturer: 'Oventrop',

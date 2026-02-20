@@ -269,7 +269,7 @@ export function RadiatorEditPage() {
                 {...form.getInputProps('valveType')}
               />
               <Select
-                label={t('radiators.valveDn')}
+                label={<LabelWithHelp label={t('radiators.valveDn')} detail={t('help.valveDn')} helpTitle={t('radiators.valveDn')} />}
                 size="xs"
                 data={[
                   { value: '10', label: 'DN10' },

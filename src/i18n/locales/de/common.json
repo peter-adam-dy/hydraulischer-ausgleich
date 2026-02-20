@@ -154,6 +154,8 @@
     "valveType": "Ventiltyp",
     "valveTypes": {
       "danfoss_ra_n": "Danfoss RA-N",
+      "danfoss_rav": "Danfoss RAV",
+      "danfoss_ravl": "Danfoss RAVL",
       "heimeier_v_exact": "Heimeier V-exact II",
       "oventrop_av6": "Oventrop AV-6"
     },
