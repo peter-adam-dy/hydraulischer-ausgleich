@@ -8,16 +8,8 @@ export function AppLayout() {
   return (
     <AppShell
       padding="md"
-      footer={projectId ? { height: 'calc(60px + env(safe-area-inset-bottom, 0px))' } : undefined}
+      footer={projectId ? { height: 60 } : undefined}
       styles={{
-        main: {
-          paddingLeft: 'calc(var(--mantine-spacing-md) + env(safe-area-inset-left, 0px))',
-          paddingRight: 'calc(var(--mantine-spacing-md) + env(safe-area-inset-right, 0px))',
-          paddingTop: 'calc(var(--mantine-spacing-md) + env(safe-area-inset-top, 0px))',
-          paddingBottom: projectId
-            ? 'calc(var(--mantine-spacing-md) + 60px + env(safe-area-inset-bottom, 0px))'
-            : 'calc(var(--mantine-spacing-md) + env(safe-area-inset-bottom, 0px))',
-        },
         footer: {
           paddingBottom: 'env(safe-area-inset-bottom, 0px)',
         },

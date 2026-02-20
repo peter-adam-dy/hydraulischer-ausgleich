@@ -2,6 +2,7 @@ FROM node:24-alpine AS build
 RUN apk add --no-cache git
 WORKDIR /app
 COPY . .
+RUN git config --global --add safe.directory /app
 RUN npm ci
 RUN npm run build
 

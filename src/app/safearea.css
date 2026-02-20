@@ -1,0 +1,5 @@
+/* Safe area insets for iOS devices with rounded corners / notch */
+html {
+  /* Ensure the app extends into the safe area */
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+}

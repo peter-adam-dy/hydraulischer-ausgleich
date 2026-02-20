@@ -114,6 +114,7 @@ export function ResultsPage() {
         </Tabs.List>
 
         <Tabs.Panel value="heating-load">
+          <Table.ScrollContainer minWidth={500}>
           <Table striped highlightOnHover>
             <Table.Thead>
               <Table.Tr>
@@ -149,9 +150,11 @@ export function ResultsPage() {
               </Table.Tr>
             </Table.Tfoot>
           </Table>
+          </Table.ScrollContainer>
         </Tabs.Panel>
 
         <Tabs.Panel value="valves">
+          <Table.ScrollContainer minWidth={600}>
           <Table striped highlightOnHover>
             <Table.Thead>
               <Table.Tr>
@@ -184,6 +187,7 @@ export function ResultsPage() {
               )}
             </Table.Tbody>
           </Table>
+          </Table.ScrollContainer>
         </Tabs.Panel>
 
         <Tabs.Panel value="system">

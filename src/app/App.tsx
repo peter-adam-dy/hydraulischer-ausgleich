@@ -1,4 +1,5 @@
 import '@mantine/core/styles.css';
+import './safearea.css';
 import { MantineProvider } from '@mantine/core';
 import { RouterProvider } from 'react-router';
 import { theme } from './theme.ts';
