@@ -4,7 +4,6 @@ import {
   Group,
   Text,
   Stack,
-  TextInput,
   NumberInput,
   Select,
   ActionIcon,
@@ -125,14 +124,12 @@ export function PipesPage() {
   const { projectId } = useParams();
   const numProjectId = projectId ? Number(projectId) : undefined;
   const circuits = useCircuits(numProjectId);
-  const [newCircuitName, setNewCircuitName] = useState('');
   const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   const handleCreateCircuit = async () => {
-    if (newCircuitName.trim() && numProjectId) {
-      await createCircuit({ projectId: numProjectId, name: newCircuitName.trim() });
-      setNewCircuitName('');
-    }
+    if (!numProjectId) return;
+    const name = `${t('pipes.circuitNamePlaceholder')} ${circuits.length + 1}`;
+    await createCircuit({ projectId: numProjectId, name });
   };
 
   return (
@@ -140,22 +137,6 @@ export function PipesPage() {
       <PageHeader title={t('pipes.title')} backTo={`/project/${projectId}`} rightSection={<HelpIcon detail={t('help.circuit')} title={t('pipes.circuits')} />} />
 
       <Stack gap="md">
-        <Group>
-          <TextInput
-            placeholder={t('pipes.circuitNamePlaceholder')}
-            value={newCircuitName}
-            onChange={(e) => setNewCircuitName(e.currentTarget.value)}
-            style={{ flex: 1 }}
-          />
-          <Button
-            leftSection={<IconPlus size={16} />}
-            onClick={handleCreateCircuit}
-            disabled={!newCircuitName.trim()}
-          >
-            {t('pipes.createCircuit')}
-          </Button>
-        </Group>
-
         {circuits.length === 0 ? (
           <EmptyState
             title={t('pipes.empty')}
@@ -179,6 +160,15 @@ export function PipesPage() {
             </Card>
           ))
         )}
+
+        <Button
+          variant="light"
+          leftSection={<IconPlus size={16} />}
+          onClick={handleCreateCircuit}
+          fullWidth
+        >
+          {t('pipes.createCircuit')}
+        </Button>
       </Stack>
 
       <ConfirmDialog
