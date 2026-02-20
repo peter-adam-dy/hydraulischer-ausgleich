@@ -92,6 +92,7 @@
       "floor": "Floor",
       "ceiling": "Intermediate Ceiling"
     },
+    "componentNamePlaceholder": "e.g. North wall, South wall...",
     "componentArea": "Area",
     "componentWidth": "Width",
     "componentHeight": "Height",
@@ -272,6 +273,7 @@
     "loading": "Loading...",
     "error": "Error",
     "success": "Success",
+    "saved": "Saved",
     "exportData": "Export Data",
     "importData": "Import Data",
     "language": "Language"

@@ -92,6 +92,7 @@
       "floor": "Boden",
       "ceiling": "Geschossdecke"
     },
+    "componentNamePlaceholder": "z.B. Nordwand, Südwand...",
     "componentArea": "Fläche",
     "componentWidth": "Breite",
     "componentHeight": "Höhe",
@@ -272,6 +273,7 @@
     "loading": "Wird geladen...",
     "error": "Fehler",
     "success": "Erfolg",
+    "saved": "Gespeichert",
     "exportData": "Daten exportieren",
     "importData": "Daten importieren",
     "language": "Sprache"

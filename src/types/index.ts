@@ -35,6 +35,7 @@ export interface WindowComponent {
 
 export interface BuildingComponent {
   id: string;
+  name?: string; // e.g. "Nordwand", "Südwand Küche"
   type: ComponentType;
   area: number; // m² (gross area including windows)
   uValue: number; // W/(m²·K)
