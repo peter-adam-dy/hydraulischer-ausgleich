@@ -16,12 +16,21 @@ function gitInfo() {
 
 const git = gitInfo();
 
+const versionJson = JSON.stringify({ hash: git.hash, date: git.date });
+
 function versionFilePlugin(): Plugin {
   return {
     name: 'version-file',
+    configureServer(server) {
+      server.middlewares.use('/version.json', (_req, res) => {
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-store');
+        res.end(versionJson);
+      });
+    },
     writeBundle(options) {
       const dir = options.dir ?? 'dist';
-      writeFileSync(`${dir}/version.json`, JSON.stringify({ hash: git.hash, date: git.date }));
+      writeFileSync(`${dir}/version.json`, versionJson);
     },
   };
 }
