@@ -27,9 +27,10 @@ import { db } from '../../db/index.ts';
 import { useLiveQuery } from 'dexie-react-hooks';
 
 function getCoverageBadge(percent: number, t: (key: string) => string) {
-  if (percent < 90) return <Badge color="red" size="sm">{t('results.undersupplied')} ({percent}%)</Badge>;
-  if (percent <= 110) return <Badge color="green" size="sm">{t('results.adequate')} ({percent}%)</Badge>;
-  return <Badge color="yellow" size="sm">{t('results.oversupplied')} ({percent}%)</Badge>;
+  const style = { whiteSpace: 'nowrap' as const };
+  if (percent < 90) return <Badge color="red" size="sm" style={style}>{t('results.undersupplied')} ({percent}%)</Badge>;
+  if (percent <= 110) return <Badge color="green" size="sm" style={style}>{t('results.adequate')} ({percent}%)</Badge>;
+  return <Badge color="yellow" size="sm" style={style}>{t('results.oversupplied')} ({percent}%)</Badge>;
 }
 
 export function ResultsPage() {
@@ -129,9 +130,9 @@ export function ResultsPage() {
               {result.rooms.map((room) => (
                 <Table.Tr key={room.roomId}>
                   <Table.Td>{room.roomName}</Table.Td>
-                  <Table.Td ta="right">{room.heatingLoad.transmissionLoss} W</Table.Td>
-                  <Table.Td ta="right">{room.heatingLoad.ventilationLoss} W</Table.Td>
-                  <Table.Td ta="right" fw={600}>{room.heatingLoad.totalHeatingLoad} W</Table.Td>
+                  <Table.Td ta="right">{room.heatingLoad.transmissionLoss}&nbsp;W</Table.Td>
+                  <Table.Td ta="right">{room.heatingLoad.ventilationLoss}&nbsp;W</Table.Td>
+                  <Table.Td ta="right" fw={600}>{room.heatingLoad.totalHeatingLoad}&nbsp;W</Table.Td>
                   <Table.Td>{getCoverageBadge(room.coveragePercent, t)}</Table.Td>
                 </Table.Tr>
               ))}
@@ -140,12 +141,12 @@ export function ResultsPage() {
               <Table.Tr>
                 <Table.Td fw={700}>{t('results.total')}</Table.Td>
                 <Table.Td ta="right" fw={700}>
-                  {result.rooms.reduce((s, r) => s + r.heatingLoad.transmissionLoss, 0)} W
+                  {result.rooms.reduce((s, r) => s + r.heatingLoad.transmissionLoss, 0)}&nbsp;W
                 </Table.Td>
                 <Table.Td ta="right" fw={700}>
-                  {result.rooms.reduce((s, r) => s + r.heatingLoad.ventilationLoss, 0)} W
+                  {result.rooms.reduce((s, r) => s + r.heatingLoad.ventilationLoss, 0)}&nbsp;W
                 </Table.Td>
-                <Table.Td ta="right" fw={700}>{result.totalHeatingLoad} W</Table.Td>
+                <Table.Td ta="right" fw={700}>{result.totalHeatingLoad}&nbsp;W</Table.Td>
                 <Table.Td />
               </Table.Tr>
             </Table.Tfoot>
@@ -174,8 +175,8 @@ export function ResultsPage() {
                     <Table.Td>{rad.roomName}</Table.Td>
                     <Table.Td>Typ {rad.radiatorType}</Table.Td>
                     <Table.Td><Text size="xs">{rad.effectiveValveType} DN{rad.effectiveValveDn}</Text></Table.Td>
-                    <Table.Td ta="right">{rad.flowRate} L/h</Table.Td>
-                    <Table.Td ta="right">{rad.pressureLoss} Pa</Table.Td>
+                    <Table.Td ta="right">{rad.flowRate}&nbsp;L/h</Table.Td>
+                    <Table.Td ta="right">{rad.pressureLoss}&nbsp;Pa</Table.Td>
                     <Table.Td ta="right">{rad.kvValue}</Table.Td>
                     <Table.Td ta="center">
                       <Badge size="lg" variant="filled">
@@ -196,20 +197,20 @@ export function ResultsPage() {
               <Stack gap="xs">
                 <Group justify="space-between">
                   <Text c="dimmed">{t('results.totalHeatingLoad')}</Text>
-                  <Text fw={700} size="lg">{result.totalHeatingLoad} W</Text>
+                  <Text fw={700} size="lg">{result.totalHeatingLoad}&nbsp;W</Text>
                 </Group>
                 <Group justify="space-between">
                   <Text c="dimmed">{t('results.totalFlowRate')}</Text>
-                  <Text fw={700} size="lg">{result.totalFlowRate} L/h</Text>
+                  <Text fw={700} size="lg">{result.totalFlowRate}&nbsp;L/h</Text>
                 </Group>
                 <Divider />
                 <Group justify="space-between">
                   <Text c="dimmed">{t('system.supplyTemp')}</Text>
-                  <Text>{settings.supplyTemp} °C</Text>
+                  <Text>{settings.supplyTemp}&nbsp;°C</Text>
                 </Group>
                 <Group justify="space-between">
                   <Text c="dimmed">{t('system.returnTemp')}</Text>
-                  <Text>{settings.returnTemp} °C</Text>
+                  <Text>{settings.returnTemp}&nbsp;°C</Text>
                 </Group>
               </Stack>
             </Card>
@@ -221,9 +222,9 @@ export function ResultsPage() {
                   {result.criticalRadiator.roomName} — Typ {result.criticalRadiator.radiatorType}
                 </Text>
                 <Text size="sm" c="dimmed">
-                  {result.criticalRadiator.pressureLoss} Pa &middot;{' '}
-                  {result.criticalRadiator.flowRate} L/h &middot;{' '}
-                  Kv {result.criticalRadiator.kvValue}
+                  {result.criticalRadiator.pressureLoss}&nbsp;Pa &middot;{' '}
+                  {result.criticalRadiator.flowRate}&nbsp;L/h &middot;{' '}
+                  Kv&nbsp;{result.criticalRadiator.kvValue}
                 </Text>
               </Card>
             )}
