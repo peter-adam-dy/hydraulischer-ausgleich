@@ -74,9 +74,11 @@ export function calculateHydraulicBalance(
       // Flow rate based on the radiator's share of heating load
       const flowRate = calculateFlowRate(radHeatingLoad, settings.supplyTemp, settings.returnTemp);
 
-      // Find pipe length from circuit assignment
+      // Find pipe length from circuit assignment (supply + return)
       const circuitRad = circuitRadiators.find((cr) => cr.radiatorId === rad.id);
-      const pipeLength = circuitRad?.estimatedPipeLength ?? 10;
+      const supplyLength = circuitRad?.estimatedPipeLength ?? 10;
+      const returnLength = circuitRad?.pipeLengthReturn ?? supplyLength;
+      const pipeLength = supplyLength + returnLength;
 
       const pressureLoss = calculatePressureLoss(settings.specificPressureLoss, pipeLength);
 

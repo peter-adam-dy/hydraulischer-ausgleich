@@ -9,6 +9,7 @@ import {
   Select,
   ActionIcon,
   Divider,
+  Switch,
 } from '@mantine/core';
 import { IconPlus, IconTrash } from '@tabler/icons-react';
 import { useParams } from 'react-router';
@@ -63,40 +64,76 @@ function CircuitCard({ circuitId, projectId }: { circuitId: number; projectId: n
   return (
     <>
       <Stack gap="xs">
-        {circuitRadiators.map((cr) => (
-          <Group key={cr.id} gap="xs" wrap="nowrap">
-            <Text size="sm" style={{ flex: 1 }} lineClamp={1}>
-              {getRadiatorLabel(cr.radiatorId)}
-            </Text>
-            <NumberInput
-              size="xs"
-              suffix=" m"
-              min={1}
-              step={1}
-              style={{ width: 100 }}
-              value={cr.estimatedPipeLength}
-              onChange={(val) => {
-                if (typeof val === 'number' && cr.id) {
-                  updateCircuitRadiator(cr.id, { estimatedPipeLength: val });
-                }
-              }}
-            />
-            <ActionIcon
-              variant="subtle"
-              color="red"
-              size="sm"
-              onClick={() => setDeleteTarget(cr.id!)}
-            >
-              <IconTrash size={14} />
-            </ActionIcon>
-          </Group>
-        ))}
-
-        {circuitRadiators.length > 0 && (
-          <Text size="xs" c="dimmed">
-            <HelpIcon tooltip={t('help.pipeLength')} /> {t('pipes.pipeLengthHint')}
-          </Text>
-        )}
+        {circuitRadiators.map((cr) => {
+          const hasSeparateReturn = cr.pipeLengthReturn !== undefined;
+          const totalLength = cr.estimatedPipeLength + (cr.pipeLengthReturn ?? cr.estimatedPipeLength);
+          return (
+            <Card key={cr.id} padding="xs" radius="sm" withBorder bg="gray.0">
+              <Group justify="space-between" mb={4}>
+                <Text size="xs" fw={500} lineClamp={1} style={{ flex: 1 }}>
+                  {getRadiatorLabel(cr.radiatorId)}
+                </Text>
+                <ActionIcon
+                  variant="subtle"
+                  color="red"
+                  size="sm"
+                  onClick={() => setDeleteTarget(cr.id!)}
+                >
+                  <IconTrash size={14} />
+                </ActionIcon>
+              </Group>
+              <Group gap="xs" wrap="nowrap" mb={4}>
+                <NumberInput
+                  size="xs"
+                  label={hasSeparateReturn ? t('pipes.supplyLength') : t('pipes.distanceToBoiler')}
+                  suffix=" m"
+                  min={1}
+                  step={1}
+                  style={{ flex: 1 }}
+                  value={cr.estimatedPipeLength}
+                  onChange={(val) => {
+                    if (typeof val === 'number' && cr.id) {
+                      updateCircuitRadiator(cr.id, { estimatedPipeLength: val });
+                    }
+                  }}
+                />
+                {hasSeparateReturn && (
+                  <NumberInput
+                    size="xs"
+                    label={t('pipes.returnLength')}
+                    suffix=" m"
+                    min={1}
+                    step={1}
+                    style={{ flex: 1 }}
+                    value={cr.pipeLengthReturn}
+                    onChange={(val) => {
+                      if (typeof val === 'number' && cr.id) {
+                        updateCircuitRadiator(cr.id, { pipeLengthReturn: val });
+                      }
+                    }}
+                  />
+                )}
+              </Group>
+              <Group justify="space-between">
+                <Switch
+                  size="xs"
+                  label={t('pipes.separateReturn')}
+                  checked={hasSeparateReturn}
+                  onChange={(e) => {
+                    if (cr.id) {
+                      if (e.currentTarget.checked) {
+                        updateCircuitRadiator(cr.id, { pipeLengthReturn: cr.estimatedPipeLength });
+                      } else {
+                        updateCircuitRadiator(cr.id, { pipeLengthReturn: undefined as unknown as number });
+                      }
+                    }
+                  }}
+                />
+                <Text size="xs" c="dimmed">{t('pipes.totalLength')}: {totalLength}&nbsp;m</Text>
+              </Group>
+            </Card>
+          );
+        })}
 
         {availableRadiators.length > 0 && (
           <Select

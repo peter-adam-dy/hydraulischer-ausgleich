@@ -92,7 +92,8 @@ export interface CircuitRadiator {
   id?: number;
   circuitId: number;
   radiatorId: number;
-  estimatedPipeLength: number; // m
+  estimatedPipeLength: number; // m (one-way distance to radiator)
+  pipeLengthReturn?: number; // m (return pipe, if different from supply)
   sortOrder: number;
 }
 
