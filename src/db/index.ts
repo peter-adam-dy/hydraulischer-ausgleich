@@ -9,6 +9,16 @@ import type {
   CalculationResult,
 } from '../types/index.ts';
 
+const STORES = {
+  projects: '++id, name',
+  rooms: '++id, projectId',
+  radiators: '++id, projectId, roomId',
+  circuits: '++id, projectId',
+  circuitRadiators: '++id, circuitId, radiatorId',
+  systemSettings: '++id, projectId',
+  calculationResults: '++id, projectId, roomId, radiatorId',
+};
+
 class HydraulicDatabase extends Dexie {
   projects!: EntityTable<Project, 'id'>;
   rooms!: EntityTable<Room, 'id'>;
@@ -21,21 +31,13 @@ class HydraulicDatabase extends Dexie {
   constructor() {
     super('hydraulischer-ausgleich');
 
-    this.version(1).stores({
-      projects: '++id, name',
-      rooms: '++id, projectId',
-      radiators: '++id, projectId, roomId',
-      circuits: '++id, projectId',
-      circuitRadiators: '++id, circuitId, radiatorId',
-      systemSettings: '++id, projectId',
-      calculationResults: '++id, projectId, roomId, radiatorId',
-    });
+    this.version(1).stores(STORES);
 
-    // v2: Radiator gains optional valveType/valveDn fields,
+    // v2: Radiator gains optional valveType/valveDn,
     //     SystemSettings gains valveDn,
-    //     BuildingComponent/WindowComponent gain dimWidth/dimHeight (nested JSON, no index change).
-    //     Stores unchanged — Dexie only needs .stores() for index changes.
-    this.version(2).stores({}).upgrade((tx) => {
+    //     BuildingComponent/WindowComponent gain name/dimWidth/dimHeight (nested JSON).
+    //     No index changes — just a data migration for valveDn default.
+    this.version(2).stores(STORES).upgrade((tx) => {
       return tx.table('systemSettings').toCollection().modify((settings) => {
         if (settings.valveDn === undefined) {
           settings.valveDn = 15;
